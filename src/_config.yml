@@ -1,0 +1,6 @@
+name: Morea CORE (Change me)
+highlighter: pygments
+safe: false
+baseurl: /core
+exclude: [morea]
+morea_theme: spacelab

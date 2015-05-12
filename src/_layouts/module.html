@@ -1,0 +1,137 @@
+---
+layout: default
+---
+
+<div class="container">
+  <h1><small>Module: </small> {{ page.morea_page.title }} </h1>
+  <p>{{ page.morea_page.content | markdownify }}</p>
+</div>
+
+{% unless page.morea_page.morea_outcomes.size == 0 %}
+<div class="section-background-1">
+  <div class="container">
+    <h2>Learning Outcomes</h2>
+
+    {% for page_id in page.morea_page.morea_outcomes %}
+      {% assign outcome = site.morea_page_table[page_id] %}
+      <h3>{{ outcome.title }}</h3>
+      <p>
+        {% for label in outcome.morea_labels %}
+        <span class="badge">{{ label }}</span>
+        {% endfor %}
+      </p>
+      {{ outcome.content | markdownify }}
+    {% endfor %}
+
+  </div>
+</div>
+{% endunless %}
+
+
+
+{% unless page.morea_page.morea_readings.size == 0 %}
+<div class="section-background-2">
+  <div class="container">
+  <h2>Readings</h2>
+
+    <div class="row">
+      {% for page_id in page.morea_page.morea_readings %}
+        {% assign reading = site.morea_page_table[page_id] %}
+        <div class="col-sm-3">
+          <div class="thumbnail">
+            <h4><a href="{{ reading.morea_url }}">{{ reading.title }}</a></h4>
+            {{ reading.morea_summary | markdownify }}
+            <p>
+              {% for label in reading.morea_labels %}
+              <span class="badge">{{ label }}</span>
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      {% if forloop.index == 4 %}
+       </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 8 %}
+      </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 12 %}
+      </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 16 %}
+      </div><div class="row">
+      {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+{% endunless %}
+
+{% unless page.morea_page.morea_experiences.size == 0 %}
+<div class="section-background-1">
+  <div class="container">
+  <h2>Experiential Learning</h2>
+
+    <div class="row">
+      {% for page_id in page.morea_page.morea_experiences %}
+        {% assign experience = site.morea_page_table[page_id] %}
+        <div class="col-sm-3">
+          <div class="thumbnail">
+            <h4><a href="{{ experience.morea_url }}">{{ experience.title }}</a></h4>
+            {{ experience.morea_summary | markdownify }}
+            <p>
+              {% for label in experience.morea_labels %}
+              <span class="badge">{{ label }}</span>
+              {% endfor %}
+            </p>
+          </div>
+        </div>
+      {% if forloop.index == 4 %}
+      </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 8 %}
+      </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 12 %}
+       </div><div class="row">
+      {% endif %}
+      {% if forloop.index == 16 %}
+      </div><div class="row">
+      {% endif %}
+      {% endfor %}
+
+    </div>
+  </div>
+</div>
+{% endunless %}
+
+{% unless page.morea_page.morea_assessments.size == 0 %}
+<div class="section-background-2">
+  <div class="container">
+    <h2>Assessments</h2>
+
+    {% for page_id in page.morea_page.morea_assessments %}
+      {% assign assessment = site.morea_page_table[page_id] %}
+      <h3>{{ assessment.title }}</h3>
+      <p>
+        {% for label in assessment.morea_labels %}
+          <span class="badge">{{ label }}</span>
+        {% endfor %}
+      </p>
+    {% unless assessment.morea_related_outcomes.size == 0 %}
+    <p>
+      <em>Outcomes assessed:</em>
+      {% for outcome in assessment.morea_related_outcomes %}
+      <a href="/outcomes/#{{ outcome.morea_id }}">{{ outcome.title }}</a>{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
+    </p>
+    {% endunless %}
+      {{ assessment.content | markdownify }}
+    {% endfor %}
+
+  </div>
+</div>
+{% endunless %}
+
+
+

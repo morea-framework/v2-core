@@ -1,0 +1,37 @@
+<script src="{{ site.baseurl }}/js/Chart.js"></script>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="well">
+      <div style="margin-right: auto; margin-left: auto">
+        <canvas id="{{ page.morea_id }}" ></canvas>
+      </div>
+     </div>
+  </div>
+
+  <div class="col-sm-6">
+    {{ page.morea_chartjs_caption | markdownify }}
+  </div>
+
+  <script>
+
+    var moreaChartData = {
+      labels: {{ page.morea_chartjs_labels }},
+      datasets: [ { data: {{ page.morea_chartjs_data }} } ]
+    };
+
+    var moreaChartOptions = {
+      scaleGridLineColor: "gray",
+      scaleFontColor: "darkgray",
+      scaleLineColor: "darkgray",
+      responsive: true,
+      animation: false
+    };
+
+    // Get the context of the canvas element we want to select
+    var ctx = document.getElementById("{{ page.morea_id}}").getContext("2d");
+    var myNewChart = new Chart(ctx).Bar(moreaChartData, moreaChartOptions);
+
+  </script>
+
+
