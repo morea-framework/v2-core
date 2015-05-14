@@ -17,15 +17,15 @@ title: Readings
     {% for page_id in module.morea_readings %}
       {% assign reading = site.morea_page_table[page_id] %}
        <div class="col-sm-3">
-         <div class="thumbnail">
-           <h4><a href="{{ reading.morea_url }}">{{ reading.title }}</a></h4>
+         <a href="{{ reading.morea_url }}" class="thumbnail">
+           <h4>{{ reading.title }}</h4>
              {{ reading.morea_summary | markdownify }}
              <p>
              {% for label in reading.morea_labels %}
                <span class="badge">{{ label }}</span>
              {% endfor %}
              </p>
-         </div>
+         </a>
        </div>
         {% if forloop.index == 4 %}
           </div><div class="row">
