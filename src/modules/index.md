@@ -11,7 +11,7 @@ title: Modules
         
         {% if module.morea_coming_soon %}
           <div class="thumbnail">
-            <img src="{{ site.baseurl }}{{ module.morea_icon_url }}" width="100" class="img-circle img-responsive morea-img-hover">
+            <img src="{{ site.baseurl }}{{ module.morea_icon_url }}" width="100" class="img-circle img-responsive">
             <div class="caption">
               <h3 style="text-align: center; margin-top: 0">{{ forloop.index }}. {{ module.title }}</h3>
               {{ module.content | markdownify }}
@@ -25,7 +25,7 @@ title: Modules
           </div>
         {% else %}
           <a href= "{{ module.morea_id }}" class="thumbnail">
-            <img src="{{ site.baseurl }}{{ module.morea_icon_url }}" width="100" class="img-circle img-responsive morea-img-hover">
+            <img src="{{ site.baseurl }}{{ module.morea_icon_url }}" width="100" class="img-circle img-responsive">
             <div class="caption">
               <h3 style="text-align: center; margin-top: 0">{{ forloop.index }}. {{ module.title }}</h3>
               {{ module.content | markdownify }}
@@ -34,7 +34,7 @@ title: Modules
                 <span class="badge">{{ label }}</span>
               {% endfor %}
               </p>
-              <p class="text-center"><span class="btn btn-default">Learn more...</span></p>
+              <p class="text-center"><span class="btn btn-primary">Learn more...</span></p>
             </div>
           </a>
         {% endif %}
