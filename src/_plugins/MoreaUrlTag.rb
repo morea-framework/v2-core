@@ -8,7 +8,7 @@ module Jekyll
 
     def render(context)
       @site = context.registers[:site]
-      @page = site.config['morea_page_table'][text]
+      @page = @site.config['morea_page_table'][text]
       @url = "undefined ID"
       if page
         @url = page.url
