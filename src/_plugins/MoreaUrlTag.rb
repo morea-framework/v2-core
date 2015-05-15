@@ -10,11 +10,11 @@ module Jekyll
       @site = context.registers[:site]
       @page = @site.config['morea_page_table'][@text]
       @url = "undefined ID"
-      if page
-        @url = page.url
+      if @page
+        @url = @page.url
       end
 
-      "#{url}"
+      "#{@url}"
     end
   end
 end
