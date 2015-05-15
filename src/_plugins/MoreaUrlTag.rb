@@ -7,7 +7,7 @@ module Jekyll
     end
 
     def render(context)
-      site = context.registers[:site]
+      @site = context.registers[:site]
 
       "#{@text} #{Time.now} #{@site}"
     end
