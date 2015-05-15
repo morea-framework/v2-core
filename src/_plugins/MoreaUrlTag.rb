@@ -8,8 +8,13 @@ module Jekyll
 
     def render(context)
       @site = context.registers[:site]
+      @page = site.config['morea_page_table'][text]
+      @url = "undefined ID"
+      if page
+        @url = page.url
+      end
 
-      "#{@text} #{Time.now} #{@site.config['morea_reading_pages'].size}"
+      "#{url}"
     end
   end
 end
