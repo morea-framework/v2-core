@@ -331,6 +331,7 @@ module Jekyll
       read_yaml(File.join(site.source, morea_dir, subdir), file_name)
       @base = site.source
       @dir = morea_dir + "/" + subdir
+      #@dir = "modules" + "/" + subdir
       @name = file_name
       @missing_required = []
       @missing_optional = []
