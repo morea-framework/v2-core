@@ -9,6 +9,7 @@ module Jekyll
 
     def configSite(site)
       site.config['morea_module_pages'] = []
+      site.config['morea_prerequisite_pages'] = []
       site.config['morea_outcome_pages'] = []
       site.config['morea_reading_pages'] = []
       site.config['morea_experience_pages'] = []
@@ -77,12 +78,18 @@ module Jekyll
       site.config['morea_assessment_pages'] = site.config['morea_assessment_pages'].sort_by {|page| page.data['morea_sort_order']}
     end
 
-    # Prepend site.baseurl to reading pages containing a morea_url that does not start with http.
+    # Prepend site.baseurl to reading pages and prerequisites containing a morea_url that does not start with http.
     def fix_morea_urls(site)
       site.config['morea_reading_pages'].each do |reading_page|
         reading_url = reading_page.data['morea_url']
         if reading_url.match(/^\/morea/)
           reading_page.data['morea_url'] = site.baseurl + reading_url
+        end
+      end
+      site.config['morea_prerequisite_pages'].each do |prereq_page|
+        prereq_url = prereq_page.data['morea_url']
+        if prereq_url.match(/^\/modules/)
+          prereq_page.data['morea_url'] = site.baseurl + prereq_url
         end
       end
     end
@@ -223,6 +230,8 @@ module Jekyll
           site.config['morea_experience_pages'] << new_page
         elsif new_page.data['morea_type'] == "assessment"
           site.config['morea_assessment_pages'] << new_page
+        elsif new_page.data['morea_type'] == "prerequisite"
+          site.config['morea_prerequisite_pages'] << new_page
         elsif new_page.data['morea_type'] == "home"
           site.config['morea_home_page'] = new_page
         elsif new_page.data['morea_type'] == "footer"
@@ -349,6 +358,9 @@ module Jekyll
         end
       end
 
+      unless self.data['morea_prerequisites']
+        self.data['morea_prerequisites'] = []
+      end
       unless self.data['morea_related_outcomes']
         self.data['morea_related_outcomes'] = []
       end
