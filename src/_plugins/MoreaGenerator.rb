@@ -18,6 +18,9 @@ module Jekyll
       site.config['morea_footer_page'] = nil
       site.config['morea_page_table'] = {}
       site.config['morea_fatal_errors'] = false
+      if (site.config['morea_navbar_items'] == nil)
+        site.config['morea_navbar_items'] = ["Modules", "Outcomes", "Readings", "Experiences", "Assessments"]
+      end
 
     end
 
