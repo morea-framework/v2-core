@@ -94,6 +94,10 @@ module Jekyll
         if prereq_url.match(/^\/modules/)
           prereq_page.data['morea_url'] = site.baseurl + prereq_url
         end
+        icon_url = prereq_page.data['morea_icon_url']
+        unless icon_url.match(/^http/)
+          prereq_page.data['morea_icon_url'] = site.baseurl + icon_url
+        end
       end
     end
 

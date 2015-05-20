@@ -22,7 +22,7 @@ layout: default
           {{ module.content | markdownify }}
           <p>
             {% for label in module.morea_labels %}
-              <span class="badge">{{ label }}</span>
+              <div style="text-align: center;"><span class="badge">{{ label }}</span></div>
             {% endfor %}
           </p>
           <p class="text-center"><span class="btn btn-primary">Learn more...</span></p>
