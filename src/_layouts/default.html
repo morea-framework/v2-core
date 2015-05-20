@@ -77,18 +77,18 @@
        Last update on: <span>{{ site.time }}</span></p>
     <p style="margin: 0">
       {{ site.morea_module_pages.size }} modules
-      {% unless site.morea_outcome_pages.size == 0 %}
+      {% if site.morea_navbar_items contains 'Outcomes' %}
         | {{ site.morea_outcome_pages.size }} outcomes
-      {% endunless %}
-      {% unless site.morea_reading_pages.size == 0 %}
+      {% endif %}
+      {% if site.morea_navbar_items contains 'Readings' %}
         | {{ site.morea_reading_pages.size }} readings
-      {% endunless %}
-      {% unless site.morea_experience_pages.size == 0 %}
+      {% endif %}
+      {% if site.morea_navbar_items contains 'Experiences' %}
         | {{ site.morea_experience_pages.size }} experiences
-      {% endunless %}
-      {% unless site.morea_assessment_pages.size == 0 %}
+      {% endif %}
+      {% if site.morea_navbar_items contains 'Assessments' %}
         | {{ site.morea_assessment_pages.size }} assessments
-      {% endunless %}
+      {% endif %}
     </p>
   </div>
 </footer>
