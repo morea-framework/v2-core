@@ -20,7 +20,7 @@ title: Modules
                 <span class="badge">{{ label }}</span>
               {% endfor %}
               </p>
-              <p class="text-center"><span class="btn btn-default">Coming soon...</span></p>
+              <p class="text-center"><b>Coming soon...</b></p>
             </div>
           </div>
         {% else %}
@@ -34,7 +34,7 @@ title: Modules
                 <span class="badge">{{ label }}</span>
               {% endfor %}
               </p>
-              <p class="text-center"><span class="btn btn-primary">Learn more...</span></p>
+              
             </div>
           </a>
         {% endif %}

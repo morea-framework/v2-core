@@ -27,9 +27,10 @@ title: Prerequisites
                  <span class="badge">{{ label }}</span>
                {% endfor %}
              </p>
-             <p class="text-center"><span class="btn btn-primary">Learn more...</span></p>
+             
            </div>
          </a>
+        </div> 
         {% if forloop.index == 4 %}
           </div><div class="row">
         {% endif %}
