@@ -35,6 +35,9 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
+        {% if site.morea_navbar_items contains 'Prerequisites' %}
+        <li><a href="{{ site.baseurl }}/prerequisites/">Prerequisites</a></li>
+        {% endif %}
         <li><a href="{{ site.baseurl }}/modules/">Modules</a></li>
         {% if site.morea_navbar_items contains 'Outcomes' %}
           <li><a href="{{ site.baseurl }}/outcomes/">Outcomes</a></li>
@@ -76,6 +79,9 @@
     <p style="margin: 0">Powered by the <a href="http://morea-framework.github.io/">Morea Framework</a> (Theme: {{ site.morea_theme }})<br>
        Last update on: <span>{{ site.time }}</span></p>
     <p style="margin: 0">
+      {% if site.morea_navbar_items contains 'Prerequisites' %}
+        {{ site.morea_prerequisite_pages.size }} prerequisites |
+      {% endif %}
       {{ site.morea_module_pages.size }} modules
       {% if site.morea_navbar_items contains 'Outcomes' %}
         | {{ site.morea_outcome_pages.size }} outcomes
