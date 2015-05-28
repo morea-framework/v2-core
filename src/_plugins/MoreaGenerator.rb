@@ -89,6 +89,12 @@ module Jekyll
           reading_page.data['morea_url'] = site.baseurl + reading_url
         end
       end
+      site.config['morea_experience_pages'].each do |experience_page|
+        experience_url = experience_page.data['morea_url']
+        if experience_url.match(/^\/morea/)
+          experience_page.data['morea_url'] = site.baseurl + experience_url
+        end
+      end
       site.config['morea_prerequisite_pages'].each do |prereq_page|
         prereq_url = prereq_page.data['morea_url']
         if prereq_url.match(/^\/modules/)
