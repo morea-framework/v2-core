@@ -18,7 +18,7 @@ title: Learning Outcomes
 
 <div class="{% cycle 'section-background-1', 'section-background-2' %}">
   <div class="container">
-    <a style="padding-top: 50px; margin-top: -50px; display: table-caption;" name="{{ outcome.morea_id }}"></a><h3><small>{{ forloop.index }}.</small> {{ outcome.title }}</h3>
+    <a style="padding-top: 50px; margin-top: -50px; display: table-caption;" name="{{ outcome.morea_id }}"></a><h3>{{ outcome.title }}</h3>
     <p>
       {% for label in outcome.morea_labels %}
          <span class="badge">{{ label }}</span>
