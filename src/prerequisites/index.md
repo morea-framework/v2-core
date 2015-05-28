@@ -24,7 +24,7 @@ title: Prerequisites
              {{ prereq.content | markdownify }}
              <p>
                {% for label in prereq.morea_labels %}
-                 <span class="badge">{{ label }}</span>
+                 <div style="text-align: center;"><span class="badge">{{ label }}</span></div>
                {% endfor %}
              </p>
              
