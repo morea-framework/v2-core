@@ -4,3 +4,10 @@ safe: false
 baseurl: /core
 exclude: [morea]
 morea_theme: spacelab
+morea_navbar_items:
+  #- Prerequisites
+  - Modules
+  - Outcomes
+  - Readings
+  - Experiences
+  - Assessments
