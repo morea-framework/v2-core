@@ -423,6 +423,11 @@ module Jekyll
       @dir = "modules/" + morea_page.data['morea_id']
       @name = 'index.html'
 
+      # Default morea_summary to the content if not specified already.
+      unless self.data['morea_summary']
+        self.data['morea_summary'] = self.data['content']
+      end
+
       self.process(@name)
       self.data['morea_page'] = morea_page
       morea_page.data['module_page'] = self
