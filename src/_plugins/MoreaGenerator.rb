@@ -343,6 +343,9 @@ module Jekyll
         puts "  Error: Could not find page or url corresponding to #{page_id}"
         site.config['morea_fatal_errors'] = true
       end
+      if (url.end_with?("/"))
+        url.chop!
+      end
       return url
     end
 
