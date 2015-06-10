@@ -21,13 +21,27 @@ module Jekyll
       if (site.config['morea_navbar_items'] == nil)
         site.config['morea_navbar_items'] = ["Modules", "Outcomes", "Readings", "Experiences", "Assessments"]
       end
-
+      if (site.config['morea_course'] == nil)
+        site.config['morea_course'] = 'theCourse'
+      else
+        site.config['morea_course'] = site.config['morea_course'].to_s
+      end
+      if (site.config['morea_domain'] == nil)
+        site.config['morea_domain'] = ''
+      else
+        site.config['morea_domain'] = site.config['morea_domain'].to_s
+        if site.config['morea_domain'].end_with?("/")
+          site.config['morea_domain'].chop!
+        end
+      end
     end
 
     def generate(site)
       puts "\nStarting Morea page processing..."
       @fatal_errors = false
       configSite(site)
+      #print_obj_info(site)
+      puts "Site destination:" + site.config['destination']
       @summary = MoreaGeneratorSummary.new(site)
       morea_dir = site.config['morea_dir'] || 'morea'
       morea_file_paths = Dir["#{site.source}/#{morea_dir}/**/*"]
@@ -59,6 +73,7 @@ module Jekyll
       check_for_undefined_footer_page(site)
       fix_morea_urls(site)
       sort_pages(site)
+      write_module_info_file(site)
       puts @summary
       if site.config['morea_fatal_errors']
         puts "Errors found. Exiting."
@@ -264,6 +279,70 @@ module Jekyll
       end
     end
 
+    # Print out variables associated with obj. For debugging.
+    def print_obj_info(obj)
+      obj.instance_variables.map{|var| puts [var, obj.instance_variable_get(var)].join(":")}
+    end
+
+    # Writes out the file module-info.js to the top-level directory.
+    # This file contains a variable assignment to a literal object containing module and prereq info.
+    def write_module_info_file(site)
+      module_file_dir = site.config['source']
+      module_file_name = 'module-info.js'
+      module_file_path = module_file_dir + '/' + module_file_name
+      module_file_contents = site.config['morea_course'] + ' = {' + "\n"
+      module_file_contents += get_module_json_string(site)
+      module_file_contents += "\n" + '}'
+      #puts "module file contents: \n" + module_file_contents
+      File.open(module_file_path, 'w') { |file| file.write(module_file_contents) }
+      site.static_files << Jekyll::StaticFile.new(site, site.source, '', module_file_name)
+    end
+
+    def get_module_json_string(site)
+      json = "modules: {"
+      site.config['morea_module_pages'].each do |mod|
+        mod_id = mod.data['morea_id']
+        json += "\n  { course: #{site.config['morea_course'].inspect}, title: #{mod.data['title'].inspect}, moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, sort_order: #{mod.data['morea_sort_order']}, description: #{mod.data['morea_summary'].inspect} },"
+      end
+      #strip trailing comma
+      json.chop!
+      json += "\n},"
+
+      json += "\n prerequisites: {"
+      #for module_page in module_pages
+      site.config['morea_module_pages'].each do |mod|
+        mod_id = mod.data['morea_id']
+        # for each prereq in module_page.prerequisites_pages
+        mod.data['morea_prerequisites'].each do |prereq_id|
+          # create record with module_page.url and prerequisite_page.url
+          prereq_entry = "\n  { moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, prerequisiteUrl: #{get_module_url_from_id(prereq_id, site).inspect} },"
+          json += prereq_entry
+        end
+      end
+      json.chop!
+      json += "\n}"
+      return json
+    end
+
+    def get_module_url_from_id(page_id, site)
+      url = ""
+      site.config['morea_page_table'].each do |morea_id, morea_page|
+        if (morea_id == page_id)
+          if (morea_page.data['morea_type'] == 'module')
+            url = "#{site.config['morea_domain']}#{site.baseurl}/modules/#{morea_page.data['morea_id']}"
+          else  # should be a prereq and so url is absolute.
+            url = morea_page.data['morea_url']
+          end
+        end
+      end
+      if (url == "")
+        puts "  Error: Could not find page or url corresponding to #{page_id}"
+        site.config['morea_fatal_errors'] = true
+      end
+      return url
+    end
+
+
     def validate(morea_page, site)
       # Check for required tags: morea_id, morea_type, and title.
       if !morea_page.data['morea_id']
@@ -392,6 +471,11 @@ module Jekyll
     # Ruby Newbie Alert: copied this from Convertible cause 'include Convertible' didn't work for me.
     def published?
       !(self.data.has_key?('published') && self.data['published'] == false)
+    end
+
+    # Print out variables associated with obj. For debugging.
+    def print_obj_info(obj)
+      obj.instance_variables.map{|var| puts [var, obj.instance_variable_get(var)].join(":")}
     end
 
     # Prints a string listing warnings or errors if there were any, otherwise does nothing.
