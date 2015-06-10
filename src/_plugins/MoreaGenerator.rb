@@ -292,14 +292,14 @@ module Jekyll
       module_file_path = module_file_dir + '/' + module_file_name
       module_file_contents = site.config['morea_course'] + ' = {' + "\n"
       module_file_contents += get_module_json_string(site)
-      module_file_contents += "\n" + '}'
+      module_file_contents += "\n" + '};'
       #puts "module file contents: \n" + module_file_contents
       File.open(module_file_path, 'w') { |file| file.write(module_file_contents) }
       site.static_files << Jekyll::StaticFile.new(site, site.source, '', module_file_name)
     end
 
     def get_module_json_string(site)
-      json = "modules: {"
+      json = "modules: ["
       site.config['morea_module_pages'].each do |mod|
         mod_id = mod.data['morea_id']
         json += "\n  { course: #{site.config['morea_course'].inspect}, title: #{mod.data['title'].inspect}, moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, sort_order: #{mod.data['morea_sort_order']}, description: #{mod.data['morea_summary'].inspect} },"
@@ -308,9 +308,9 @@ module Jekyll
       if (json.end_with?(","))
         json.chop!
       end
-      json += "\n},"
+      json += "\n],"
 
-      json += "\n prerequisites: {"
+      json += "\n prerequisites: ["
       #for module_page in module_pages
       site.config['morea_module_pages'].each do |mod|
         mod_id = mod.data['morea_id']
@@ -324,7 +324,7 @@ module Jekyll
       if (json.end_with?(","))
         json.chop!
       end
-      json += "\n}"
+      json += "\n]"
       return json
     end
 
