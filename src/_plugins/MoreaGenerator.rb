@@ -305,7 +305,9 @@ module Jekyll
         json += "\n  { course: #{site.config['morea_course'].inspect}, title: #{mod.data['title'].inspect}, moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, sort_order: #{mod.data['morea_sort_order']}, description: #{mod.data['morea_summary'].inspect} },"
       end
       #strip trailing comma
-      json.chop!
+      if (json.end_with?(","))
+        json.chop!
+      end
       json += "\n},"
 
       json += "\n prerequisites: {"
@@ -319,7 +321,9 @@ module Jekyll
           json += prereq_entry
         end
       end
-      json.chop!
+      if (json.end_with?(","))
+        json.chop!
+      end
       json += "\n}"
       return json
     end
