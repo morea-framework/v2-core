@@ -73,7 +73,8 @@ module Jekyll
       check_for_undefined_footer_page(site)
       fix_morea_urls(site)
       sort_pages(site)
-      write_module_info_file(site)
+      ModuleInfoFile.new(site).write_module_info_file
+      ScheduleInfoFile.new(site).write_schedule_info_file
       puts @summary
       if site.config['morea_fatal_errors']
         puts "Errors found. Exiting."
@@ -284,72 +285,6 @@ module Jekyll
       obj.instance_variables.map{|var| puts [var, obj.instance_variable_get(var)].join(":")}
     end
 
-    # Writes out the file module-info.js to the top-level directory.
-    # This file contains a variable assignment to a literal object containing module and prereq info.
-    def write_module_info_file(site)
-      module_file_dir = site.config['source']
-      module_file_name = 'module-info.js'
-      module_file_path = module_file_dir + '/' + module_file_name
-      module_file_contents = site.config['morea_course'] + ' = {' + "\n"
-      module_file_contents += get_module_json_string(site)
-      module_file_contents += "\n" + '};'
-      #puts "module file contents: \n" + module_file_contents
-      File.open(module_file_path, 'w') { |file| file.write(module_file_contents) }
-      site.static_files << Jekyll::StaticFile.new(site, site.source, '', module_file_name)
-    end
-
-    def get_module_json_string(site)
-      json = "modules: ["
-      site.config['morea_module_pages'].each do |mod|
-        mod_id = mod.data['morea_id']
-        json += "\n  { course: #{site.config['morea_course'].inspect}, title: #{mod.data['title'].inspect}, moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, sort_order: #{mod.data['morea_sort_order']}, description: #{mod.data['morea_summary'].inspect} },"
-      end
-      #strip trailing comma
-      if (json.end_with?(","))
-        json.chop!
-      end
-      json += "\n],"
-
-      json += "\n prerequisites: ["
-      #for module_page in module_pages
-      site.config['morea_module_pages'].each do |mod|
-        mod_id = mod.data['morea_id']
-        # for each prereq in module_page.prerequisites_pages
-        mod.data['morea_prerequisites'].each do |prereq_id|
-          # create record with module_page.url and prerequisite_page.url
-          prereq_entry = "\n  { moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, prerequisiteUrl: #{get_module_url_from_id(prereq_id, site).inspect} },"
-          json += prereq_entry
-        end
-      end
-      if (json.end_with?(","))
-        json.chop!
-      end
-      json += "\n]"
-      return json
-    end
-
-    def get_module_url_from_id(page_id, site)
-      url = ""
-      site.config['morea_page_table'].each do |morea_id, morea_page|
-        if (morea_id == page_id)
-          if (morea_page.data['morea_type'] == 'module')
-            url = "#{site.config['morea_domain']}#{site.baseurl}/modules/#{morea_page.data['morea_id']}"
-          else  # should be a prereq and so url is absolute.
-            url = morea_page.data['morea_url']
-          end
-        end
-      end
-      if (url == "")
-        puts "  Error: Could not find page or url corresponding to #{page_id}"
-        site.config['morea_fatal_errors'] = true
-      end
-      if (url.end_with?("/"))
-        url.chop!
-      end
-      return url
-    end
-
-
     def validate(morea_page, site)
       # Check for required tags: morea_id, morea_type, and title.
       if !morea_page.data['morea_id']
@@ -558,6 +493,124 @@ module Jekyll
 
     def to_s
       "  Summary:\n    #{@total_files} total, #{@published_files} published, #{@unpublished_files} unpublished, #{@morea_files} markdown, #{@non_morea_files} other\n    #{@site.config['morea_module_pages'].size} modules, #{@site.config['morea_outcome_pages'].size} outcomes, #{@site.config['morea_reading_pages'].size} readings, #{@site.config['morea_experience_pages'].size} experiences, #{@site.config['morea_assessment_pages'].size} assessments\n    #{@yaml_errors} errors, #{@yaml_warnings} warnings"
+    end
+  end
+
+  # Gather schedule data and write it to the schedule directory in a file called schedule-info.js.
+  class ScheduleInfoFile
+    def initialize(site)
+      @site = site
+      @schedule_file_dir = @site.config['source']
+      @schedule_file_name = 'schedule-info.js'
+      @schedule_file_path= @schedule_file_dir + '/schedule/' + @schedule_file_name
+    end
+
+    # Write a file declaring a global variable called moreaEventData containing an array of calendar events.
+    def write_schedule_info_file
+      schedule_file_contents = 'moreaEventData = '
+      schedule_file_contents += get_schedule_events(@site)
+      #puts "schedule file contents: \n" + schedule_file_contents
+      File.open(@schedule_file_path, 'w') { |file| file.write(schedule_file_contents) }
+      @site.static_files << Jekyll::StaticFile.new(@site, @site.source, 'schedule/', @schedule_file_name)
+    end
+
+    # Returns a JS array of object literals containing event data in FullCalendar syntax.
+    def get_schedule_events(site)
+      events = "["
+      site.config['morea_page_table'].each do |morea_id, morea_page|
+        if morea_page.data.has_key?('morea_start_date')
+          event = "\n  {title: #{morea_page.data['title'].inspect}, url: #{get_event_url(morea_page, site).inspect}, start: #{morea_page.data['morea_start_date'].inspect}"
+          if morea_page.data.has_key?('morea_end_date')
+            event += ", end: #{morea_page.data['morea_end_date'].inspect}"
+          end
+          event += "},"
+          events += event
+        end
+      end
+      if (events.end_with?(","))
+        events.chop!
+      end
+      events += "\n]"
+      return events
+    end
+
+    # Returns the URL (not including domain name) for this page.
+    def get_event_url(morea_page, site)
+      if (morea_page.data['morea_type'] == 'module')
+        url = "#{site.baseurl}/modules/#{morea_page.data['morea_id']}"
+      else  # otherwise the baseurl is included. Weird.
+        url = "#{morea_page.data['morea_url']}"
+      end
+      return url
+    end
+  end
+
+
+  # Gathers module metadata and writes it to a top-level file (module-info.js)
+  class ModuleInfoFile
+    def initialize(site)
+      @site = site
+      @module_file_dir = @site.config['source']
+      @module_file_name = 'module-info.js'
+      @module_file_path = @module_file_dir + '/' + @module_file_name
+    end
+
+    # Writes out the file module-info.js to the top-level directory.
+    # This file contains a variable assignment to a literal object containing module and prereq info.
+    def write_module_info_file
+      module_file_contents = @site.config['morea_course'] + ' = {' + "\n"
+      module_file_contents += get_module_json_string(@site)
+      module_file_contents += "\n" + '}'
+      #puts "module file contents: \n" + module_file_contents
+      File.open(@module_file_path, 'w') { |file| file.write(module_file_contents) }
+      @site.static_files << Jekyll::StaticFile.new(@site, @site.source, '', @module_file_name)
+    end
+
+    # Create the object literal representing and array of module object literals and an array of prereq object literals.
+    def get_module_json_string(site)
+      json = "modules: {"
+      site.config['morea_module_pages'].each do |mod|
+        mod_id = mod.data['morea_id']
+        json += "\n  { course: #{site.config['morea_course'].inspect}, title: #{mod.data['title'].inspect}, moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, sort_order: #{mod.data['morea_sort_order']}, description: #{mod.data['morea_summary'].inspect} },"
+      end
+      #strip trailing comma
+      json.chop!
+      json += "\n},"
+
+      json += "\n prerequisites: {"
+      #for module_page in module_pages
+      site.config['morea_module_pages'].each do |mod|
+        mod_id = mod.data['morea_id']
+        # for each prereq in module_page.prerequisites_pages
+        mod.data['morea_prerequisites'].each do |prereq_id|
+          # create record with module_page.url and prerequisite_page.url
+          prereq_entry = "\n  { moduleUrl: #{get_module_url_from_id(mod_id, site).inspect}, prerequisiteUrl: #{get_module_url_from_id(prereq_id, site).inspect} },"
+          json += prereq_entry
+        end
+      end
+      json.chop!
+      json += "\n}"
+      return json
+    end
+
+    # Return the fully qualified URL corresponding to a module ID.
+    # Note this requires _config.yml to have the morea_domain property defined.
+    def get_module_url_from_id(page_id, site)
+      url = ""
+      site.config['morea_page_table'].each do |morea_id, morea_page|
+        if (morea_id == page_id)
+          if (morea_page.data['morea_type'] == 'module')
+            url = "#{site.config['morea_domain']}#{site.baseurl}/modules/#{morea_page.data['morea_id']}"
+          else  # should be a prereq and so url is absolute.
+            url = morea_page.data['morea_url']
+          end
+        end
+      end
+      if (url == "")
+        puts "  Error: Could not find page or url corresponding to #{page_id}"
+        site.config['morea_fatal_errors'] = true
+      end
+      return url
     end
   end
 end
