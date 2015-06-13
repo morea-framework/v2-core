@@ -22,7 +22,7 @@ module Jekyll
         site.config['morea_navbar_items'] = ["Modules", "Outcomes", "Readings", "Experiences", "Assessments"]
       end
       if (site.config['morea_course'] == nil)
-        site.config['morea_course'] = 'theCourse'
+        site.config['morea_course'] = ''
       else
         site.config['morea_course'] = site.config['morea_course'].to_s
       end
@@ -73,7 +73,9 @@ module Jekyll
       check_for_undefined_footer_page(site)
       fix_morea_urls(site)
       sort_pages(site)
-      ModuleInfoFile.new(site).write_module_info_file
+      unless (site.config['morea_course'] == '')
+        ModuleInfoFile.new(site).write_module_info_file
+      end
       ScheduleInfoFile.new(site).write_schedule_info_file
       puts @summary
       if site.config['morea_fatal_errors']
@@ -265,6 +267,16 @@ module Jekyll
           site.config['morea_home_page'] = new_page
         elsif new_page.data['morea_type'] == "footer"
           site.config['morea_footer_page'] = new_page
+        elsif new_page.data['morea_type'] == "overview_modules"
+          site.config['morea_overview_modules'] = new_page
+        elsif new_page.data['morea_type'] == "overview_outcomes"
+          site.config['morea_overview_outcomes'] = new_page
+        elsif new_page.data['morea_type'] == "overview_readings"
+          site.config['morea_overview_readings'] = new_page
+        elsif new_page.data['morea_type'] == "overview_experiences"
+          site.config['morea_overview_experiences'] = new_page
+        elsif new_page.data['morea_type'] == "overview_assessments"
+          site.config['morea_overview_assessments'] = new_page
         end
       else
         @summary.unpublished_files += 1

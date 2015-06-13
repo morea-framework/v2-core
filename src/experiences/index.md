@@ -7,6 +7,12 @@ title: Experiences
   <h1>Experiential Learning <small>in module order</small></h1>
 </div>
 
+{% if site.morea_overview_experiences %}
+<div class="container">
+  {{ site.morea_overview_experiences.content | markdownify }}
+</div>
+{% endif %}
+
 {% for module in site.morea_module_pages %}
 {% if module.morea_coming_soon != true and module.morea_experiences.size > 0 %}
 <div class="{% cycle 'section-background-1', 'section-background-2' %}">

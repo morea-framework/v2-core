@@ -5,6 +5,11 @@ title: Modules
 
 <div class="container">
   <h1>Modules <small>Topics covered in this class.</small></h1>
+  
+  {% if site.morea_overview_modules %}
+    {{ site.morea_overview_modules.content | markdownify }}
+  {% endif %}
+  
   <div class="row">
      {% for module in site.morea_module_pages %}
         <div class="col-sm-3">

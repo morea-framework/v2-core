@@ -7,6 +7,12 @@ title: Assessments
   <h1>Assessments <small>in module order</small></h1>
 </div>
 
+{% if site.morea_overview_assessments %}
+<div class="container">
+  {{ site.morea_overview_assessments.content | markdownify }}
+</div>
+{% endif %}
+
 {% for module in site.morea_module_pages %}
 {% if module.morea_coming_soon != true and module.morea_assessments.size > 0 %}
 <div class="{% cycle 'section-background-1', 'section-background-2' %}">

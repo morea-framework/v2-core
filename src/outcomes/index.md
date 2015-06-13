@@ -7,8 +7,16 @@ title: Learning Outcomes
   <h1>Learning Outcomes</h1>
 </div>
 
+{% if site.morea_overview_outcomes %}
+<div class="container">
+  {{ site.morea_overview_outcomes.content | markdownify }}
+</div>
+{% endif %}
+
 {% if site.morea_outcome_pages.size == 0 %}
-<p>No outcomes for this course.</p>
+<div class="container">
+  <p>No outcomes for this course.</p>
+</div>
 {% endif %}
 
 

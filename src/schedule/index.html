@@ -4,29 +4,25 @@ title: Schedule
 ---
 
 <!-- Load FullCalendar for schedule page. -->
-<!-- Documentation available at: http://arshaw.com/fullcalendar/docs/google_calendar/ -->
-<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.2/fullcalendar.css">
-<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.2/fullcalendar.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.2.2/gcal.js"></script>
+<!-- Documentation available at: http://fullcalendar.io/ -->
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/gcal.js"></script>
+
+<!-- This script defines the moreaEventData variable containing an array of events from Morea pages. -->
+<script src="schedule-info.js"></script>
+
 <div style="margin-bottom: 10px" class="container">
   <h1>Schedule</h1>
-
-  <p>The schedule for this course is managed using the public Google Calendar displayed on this page. You can subscribe to this calendar using its <a href="https://www.google.com/calendar/ical/ovc7gbat5jfpb6kg0a14ur12qg%40group.calendar.google.com/public/basic.ics">iCal address</a>.</p>
 
   <div id='calendar'></div>
 </div>
 <script>
   $(document).ready(function () {
-
-    // page is now ready, initialize the calendar...
-
     $('#calendar').fullCalendar({
-      googleCalendarApiKey: 'AIzaSyBTwmlnN3BzIterDVli-CyHBxqV8gjWj3U',
       eventColor: '#446e9b',
-      events: {
-        googleCalendarId: 'ovc7gbat5jfpb6kg0a14ur12qg@group.calendar.google.com'
-      }
+      events: moreaEventData
     });
   });
 </script>
