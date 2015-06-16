@@ -125,7 +125,7 @@ module Jekyll
       end
     end
 
-    # Tell each outcome all the modules that referred to it.
+    # Tell each outcome and each assessment all the modules that referred to it.
     def set_referencing_modules(site)
       site.config['morea_module_pages'].each do |module_page|
         module_page.data['morea_outcomes'].each do |outcome_id|
@@ -137,7 +137,20 @@ module Jekyll
           end
         end
       end
+
+      site.config['morea_module_pages'].each do |module_page|
+        module_page.data['morea_assessments'].each do |assessment_id|
+          assessment = site.config['morea_page_table'][assessment_id]
+          if assessment
+            unless module_page.data['morea_coming_soon']
+              assessment.data['referencing_modules'] << module_page
+            end
+          end
+        end
+      end
     end
+
+
 
     # Tell each outcome all the assessments that referred to it.
     def set_referencing_assessment(site)
@@ -152,6 +165,7 @@ module Jekyll
         end
       end
     end
+
 
     def print_morea_problems(site)
       site.config['morea_page_table'].each do |morea_id, morea_page|
