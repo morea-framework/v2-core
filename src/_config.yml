@@ -3,7 +3,7 @@ markdown: kramdown
 kramdown:
   input: GFM
   syntax_highlighter: rouge
-safe: false
+mathjax: true
 baseurl: /core
 exclude: [morea]
 morea_theme: spacelab
