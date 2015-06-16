@@ -1,5 +1,8 @@
 name: Morea CORE (Change me)
-highlighter: pygments
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
 safe: false
 baseurl: /core
 exclude: [morea]
