@@ -72,6 +72,7 @@ module Jekyll
       check_for_undefined_home_page(site)
       check_for_undefined_footer_page(site)
       fix_morea_urls(site)
+      set_due_date(site)
       sort_pages(site)
       unless (site.config['morea_course'] == '')
         ModuleInfoFile.new(site).write_module_info_file
@@ -162,6 +163,27 @@ module Jekyll
               outcome.data['morea_referencing_assessments'] << assessment_page
             end
           end
+        end
+      end
+    end
+
+
+    # For readings and experiences with a due date, add a label.
+    def set_due_date (site)
+      site.config['morea_experience_pages'].each do |page|
+        if page.data['morea_start_date']
+          if page.data['morea_labels'] == nil
+            page.data['morea_labels'] = []
+          end
+          page.data['morea_labels'] << "Due: #{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
+        end
+      end
+      site.config['morea_reading_pages'].each do |page|
+        if page.data['morea_start_date']
+          if page.data['morea_labels'] == nil
+            page.data['morea_labels'] = []
+          end
+          page.data['morea_labels'] << "Due: #{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
         end
       end
     end
