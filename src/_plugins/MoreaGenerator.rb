@@ -175,7 +175,7 @@ module Jekyll
           if page.data['morea_labels'] == nil
             page.data['morea_labels'] = []
           end
-          page.data['morea_labels'] << "Due: #{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
+          page.data['morea_labels'] << "#{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
         end
       end
       site.config['morea_reading_pages'].each do |page|
@@ -183,7 +183,7 @@ module Jekyll
           if page.data['morea_labels'] == nil
             page.data['morea_labels'] = []
           end
-          page.data['morea_labels'] << "Due: #{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
+          page.data['morea_labels'] << "#{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
         end
       end
     end
