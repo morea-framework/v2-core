@@ -168,17 +168,10 @@ module Jekyll
     end
 
 
-    # For readings and experiences with a due date, add a label.
+    # For readings, experiences, and assessments with a due date, add a label.
     def set_due_date (site)
-      site.config['morea_experience_pages'].each do |page|
-        if page.data['morea_start_date']
-          if page.data['morea_labels'] == nil
-            page.data['morea_labels'] = []
-          end
-          page.data['morea_labels'] << "#{(Time.parse(page.data['morea_start_date'])).strftime("%d %b %I:%M %p")}"
-        end
-      end
-      site.config['morea_reading_pages'].each do |page|
+      pages = site.config['morea_experience_pages'] + site.config['morea_reading_pages'] + site.config['morea_assessment_pages']
+      pages.each do |page|
         if page.data['morea_start_date']
           if page.data['morea_labels'] == nil
             page.data['morea_labels'] = []
