@@ -114,6 +114,9 @@ module Jekyll
           experience_page.data['morea_url'] = site.baseurl + experience_url
         end
       end
+      site.config['morea_assessment_pages'].each do |assessment_page|
+        assessment_page.data['morea_url'] = site.baseurl + "/assessments#" + assessment_page.data['morea_id']
+      end
       site.config['morea_prerequisite_pages'].each do |prereq_page|
         prereq_url = prereq_page.data['morea_url']
         if prereq_url.match(/^\/modules/)
@@ -125,6 +128,7 @@ module Jekyll
         end
       end
     end
+
 
     # Tell each outcome and each assessment all the modules that referred to it.
     def set_referencing_modules(site)
