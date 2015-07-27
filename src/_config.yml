@@ -15,7 +15,7 @@ morea_navbar_items:
   - Readings
   - Experiences
   - Assessments
-  #-Schedule
+  #- Schedule
 
 # The following properties are optional.
 # See the User Guide (http://morea-framework.github.io/userguide.html) for more info.
