@@ -130,7 +130,7 @@ module Jekyll
     end
 
 
-    # Tell each outcome and each assessment all the modules that referred to it.
+    # Tell each outcome, assessment, experience, and reading all the modules that referred to it.
     def set_referencing_modules(site)
       site.config['morea_module_pages'].each do |module_page|
         module_page.data['morea_outcomes'].each do |outcome_id|
@@ -149,6 +149,28 @@ module Jekyll
           if assessment
             unless module_page.data['morea_coming_soon']
               assessment.data['referencing_modules'] << module_page
+            end
+          end
+        end
+      end
+
+      site.config['morea_module_pages'].each do |module_page|
+        module_page.data['morea_readings'].each do |reading_id|
+          reading = site.config['morea_page_table'][reading_id]
+          if reading
+            unless module_page.data['morea_coming_soon']
+              reading.data['referencing_modules'] << module_page
+            end
+          end
+        end
+      end
+
+      site.config['morea_module_pages'].each do |module_page|
+        module_page.data['morea_experiences'].each do |experience_id|
+          experience = site.config['morea_page_table'][experience_id]
+          if experience
+            unless module_page.data['morea_coming_soon']
+              experience.data['referencing_modules'] << module_page
             end
           end
         end
@@ -430,7 +452,7 @@ module Jekyll
       # Provide defaults
       if (self.data['morea_type'] == 'experience') || (self.data['morea_type'] == 'reading')
           unless self.data['layout']
-          self.data['layout'] = 'default'
+          self.data['layout'] = 'page'
         end
         unless self.data['topdiv']
           self.data['topdiv'] = 'container'

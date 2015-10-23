@@ -2,6 +2,17 @@
 layout: default
 title: Readings
 ---
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+        {% if site.morea_head_breadcrumb_link %}
+          <li><a href="{{ site.morea_head_breadcrumb_link }}">{{ site.morea_head_breadcrumb_label }}</a></li>
+          {% endif %}
+      <li><a href="/">Home</a></li>
+      <li class="active">{{ page.title }}</li>
+    </ol>
+  </div>
+</div>
 
 <div class="container">
   <h1>Readings and other resources <small>in module order</small></h1>

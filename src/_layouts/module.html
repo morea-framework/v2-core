@@ -2,6 +2,16 @@
 layout: default
 ---
 
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+      <li><a href="/">Home</a></li>
+      <li><a href="/modules">Modules</a></li>
+      <li class="active">{{ page.title }}</li>
+    </ol>
+  </div>
+</div>
+
 <div class="container">
   <h1><small>Module: </small> {{ page.morea_page.title }} </h1>
   <p>{{ page.morea_page.content | markdownify }}</p>

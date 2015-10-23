@@ -23,3 +23,6 @@ morea_navbar_items:
 # morea_course: ics311
 # morea_domain: http://morea-framework.github.io/
 # morea_google_analytics_tracking_id: "<your tracking id here>"
+
+#morea_head_breadcrumb_link: "http://cnn.com"
+#morea_head_breadcrumb_label: "CNN Site"

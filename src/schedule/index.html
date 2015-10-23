@@ -3,6 +3,18 @@ layout: default
 title: Schedule
 ---
 
+<div class="breadcrumb-bar">
+  <div class="container">
+    <ol class="breadcrumb">
+      {% if site.morea_head_breadcrumb_link %}
+      <li><a href="{{ site.morea_head_breadcrumb_link }}">{{ site.morea_head_breadcrumb_label }}</a></li>
+      {% endif %}
+      <li><a href="/">Home</a></li>
+      <li class="active">{{ page.title }}</li>
+    </ol>
+  </div>
+</div>
+
 <!-- Load FullCalendar for schedule page. -->
 <!-- Documentation available at: http://fullcalendar.io/ -->
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.css">
@@ -12,6 +24,13 @@ title: Schedule
 
 <!-- This script defines the moreaEventData variable containing an array of events from Morea pages. -->
 <script src="schedule-info.js"></script>
+
+<script>
+moreaEventData.push(
+  {title: "Holiday: Thanksgiving", start: "2015-11-26"}
+)
+</script>
+
 
 <div style="margin-bottom: 10px" class="container">
   <h1>Schedule</h1>
