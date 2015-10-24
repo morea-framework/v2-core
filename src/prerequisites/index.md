@@ -9,7 +9,7 @@ title: Prerequisites
         {% if site.morea_head_breadcrumb_link %}
           <li><a href="{{ site.morea_head_breadcrumb_link }}">{{ site.morea_head_breadcrumb_label }}</a></li>
           {% endif %}
-      <li><a href="/">Home</a></li>
+      <li><a href="{{ site.baseurl }}/">Home</a></li>
       <li class="active">{{ page.title }}</li>
     </ol>
   </div>
