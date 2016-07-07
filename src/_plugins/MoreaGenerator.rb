@@ -376,7 +376,12 @@ module Jekyll
         if !morea_page.data['morea_url']
           # When not supplied we automatically generate the relative URL to the page.
           # Note we include the baseurl so that for readings and experiences, this link is absolute.
-          morea_page.data['morea_url'] ="#{site.baseurl}#{morea_page.dir}/#{morea_page.basename}.html"
+          # We may or may not need a / separator depending upon the underlying version of Jekyll.
+          slasher = '/'
+          if (morea_page.dir.end_with? '/') || (morea_page.basename.start_with? '/')
+            slasher = ''
+          end
+          morea_page.data['morea_url'] ="#{site.baseurl}#{morea_page.dir}#{slasher}#{morea_page.basename}.html"
         end
       end
 
